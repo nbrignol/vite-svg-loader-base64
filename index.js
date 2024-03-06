@@ -41,7 +41,7 @@ module.exports = function svgLoader (options = {}) {
       }
 
       if (parameter){
-          svg = svg.replace(/<svg /, `<svg class="${parameter}" `)
+          svg = svg.replace(/<svg/, `<svg class="${parameter}" `)
       }
 
       if (importType === 'raw') {
