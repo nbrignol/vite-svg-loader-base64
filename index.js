@@ -20,7 +20,7 @@ module.exports = function svgLoader (options = {}) {
       }
 
       const [path, query] = id.split('?', 2)
-      const [unused, parameter] = id.split(':', 2)
+      const parameters = id.split(':', 2)
 
       const importType = query || defaultImport
 
@@ -47,7 +47,12 @@ module.exports = function svgLoader (options = {}) {
       }
 
       if (importType === 'foo') {
-        return `export default ${JSON.stringify(parameter)}`
+        const result = {
+          id: id,
+          source: svg,
+          parameters: parameters
+        }
+        return `export default ${JSON.stringify(result)}`
       }
 
       if (svgo !== false && query !== 'skipsvgo') {
