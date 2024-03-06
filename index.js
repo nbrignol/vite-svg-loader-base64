@@ -8,7 +8,7 @@ const debug = _debug('vite-svg-loader')
 module.exports = function svgLoader (options = {}) {
   const { svgoConfig, svgo, defaultImport } = options
 
-  const svgRegex = /\.svg(\?(raw|component|skipsvgo|base64|test))?(\:([a-z]+))?$/
+  const svgRegex = /\.svg(\?(raw|component|skipsvgo|base64|foo|bar))?(\:([a-z]+))?$/
 
   return {
     name: 'svg-loader',
@@ -46,8 +46,12 @@ module.exports = function svgLoader (options = {}) {
         return btoa(svg)
       }
 
-      if (importType === 'test') {
-        return `${parameter} -- ${svg}`
+      if (importType === 'foo') {
+        return `${parameter}`
+      }
+
+      if (importType === 'bar') {
+        return `${svg}`
       }
 
       if (svgo !== false && query !== 'skipsvgo') {
