@@ -8,20 +8,22 @@ const debug = _debug('vite-svg-loader')
 module.exports = function svgLoader (options = {}) {
   const { svgoConfig, svgo, defaultImport } = options
 
-  const svgRegex = /\.svg(\?(raw|component|skipsvgo|base64|foo))?(\!([a-z]+))?$/
+  const svgRegex = /\.svg(\?(raw|component|skipsvgo|base64))?(\=([a-z]+))?$/
 
   return {
     name: 'svg-loader',
     enforce: 'pre',
 
     async load (id) {
-      if (!id.match(svgRegex)) {
+      const regexResult = id.matchAll(svgRegex);
+      if (! regexResult) {
         return
       }
 
-      const [path, query] = id.split('?', 2)
-      const parameters = id.split('!', 2)
-
+      const [path] = id.split('?', 2)
+      const query = regexResult[2]
+      const parameter = regexResult[4]
+      
       const importType = query || defaultImport
 
       if (importType === 'url') {
@@ -38,21 +40,16 @@ module.exports = function svgLoader (options = {}) {
         return
       }
 
+      if (parameter){
+          svg = svg.replace(/<svg /, `<svg class="${parameter}" `)
+      }
+
       if (importType === 'raw') {
         return `export default ${JSON.stringify(svg)}`
       }
 
       if (importType === 'base64') {
         return `export default ${JSON.stringify(btoa(svg))}`
-      }
-
-      if (importType === 'foo') {
-        const result = {
-          id: id,
-          source: svg,
-          parameters: parameters
-        }
-        return `export default ${JSON.stringify(result)}`
       }
 
       if (svgo !== false && query !== 'skipsvgo') {
