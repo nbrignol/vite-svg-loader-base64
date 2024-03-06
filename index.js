@@ -43,15 +43,11 @@ module.exports = function svgLoader (options = {}) {
       }
 
       if (importType === 'base64') {
-        return btoa(svg)
+        return `export default ${JSON.stringify(btoa(svg))}`
       }
 
       if (importType === 'foo') {
-        return `${parameter}`
-      }
-
-      if (importType === 'bar') {
-        return `${svg}`
+        return `export default ${JSON.stringify(parameter)}`
       }
 
       if (svgo !== false && query !== 'skipsvgo') {
