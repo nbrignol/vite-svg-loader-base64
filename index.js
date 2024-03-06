@@ -15,7 +15,7 @@ module.exports = function svgLoader (options = {}) {
     enforce: 'pre',
 
     async load (id) {
-      const regexResult = id.matchAll(svgRegex);
+      const regexResult = id.match(svgRegex);
       if (! regexResult) {
         return
       }
